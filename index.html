@@ -1,0 +1,190 @@
+<!-- SISTEMA INTEGRADO CRIADO POR EDDY PEREIRA 10/03/2026 -->
+<!-- INICIO DO SISTEMA COM AS CONFIGURAÇÕES DE AMBIENTE, LINKS PARA DESIGN E MENU DE NAVEGAÇÃO, ESTRUTURA E BASE DO MENU -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Integrado Chicco e Eddy Gestão de Beleza 2026.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body { background-color: #f5f5f5; }
+        .aba { display: none; padding: 20px; }
+        .aba.ativa { display: block; }
+        .card-meta { background: linear-gradient(45deg, #1a237e, #3949ab); color: white; }
+    </style>
+</head>
+<body>
+
+    <nav class="indigo darken-4">
+        <div class="nav-wrapper container">
+            <a href="#" class="brand-logo">Chicco & Eddy Estúdio de Beleza STI</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a onclick="abrirAba('home')">Home</a></li>
+                <li><a onclick="abrirAba('agenda')">Agenda</a></li>
+                <li><a onclick="abrirAba('clientes')">Clientes</a></li>
+                <li><a onclick="abrirAba('estoque')">Estoque</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul class="sidenav" id="mobile-demo">
+        <li><a onclick="abrirAba('home')"><i class="material-icons">home</i>Home</a></li>
+        <li><a onclick="abrirAba('agenda')"><i class="material-icons">event</i>Agenda</a></li>
+        <li><a onclick="abrirAba('clientes')"><i class="material-icons">people</i>Clientes</a></li>
+        <li><a onclick="abrirAba('estoque')"><i class="material-icons">inventory</i>Estoque</a></li>
+    </ul>
+
+    <div id="conteudo" class="container">
+
+<!-- HOME E PAINEL DE METAS, MOSTRA O FATURAMENTO E BOTÕES RÁPIDOS -->
+<section id="home" class="aba ativa">
+            <div class="card card-meta">
+                <div class="card-content">
+                    <span class="card-title">Meta Mensal</span>
+                    <h4 id="valorFaturado">R$ 0,00</h4>
+                    <div class="progress grey lighten-1">
+                        <div id="barraMeta" class="determinate white" style="width: 0%"></div>
+                    </div>
+                    <p id="textoMeta">0% da meta alcançada</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s6">
+                    <div class="card center-align" onclick="abrirAba('agenda')">
+                        <div class="card-content">
+                            <i class="material-icons medium blue-text">event</i>
+                            <p>Agenda</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="card center-align" onclick="abrirAba('clientes')">
+                        <div class="card-content">
+                            <i class="material-icons medium green-text">person_add</i>
+                            <p>Clientes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<!-- AGENDA DE HORÁRIOS, FORMULÁRIO SIMPLES PARA AGENDAMENTOS -->
+<section id="agenda" class="aba">
+            <h5>📅 Novo Agendamento</h5>
+            <div class="card">
+                <div class="card-content">
+                    <input type="text" id="ag_cliente" placeholder="Nome da Cliente">
+                    <input type="text" id="ag_servico" placeholder="Serviço (Ex: Mechas)">
+                    <input type="datetime-local" id="ag_data">
+                    <button class="btn blue darken-4" onclick="salvarAgenda()" style="width:100%">Reservar Horário</button>
+                </div>
+            </div>
+            <ul class="collection with-header" id="listaAgenda">
+                <li class="collection-header"><h6>Próximos Clientes</h6></li>
+            </ul>
+        </section>
+
+<!-- CADASTRO DE CLIENTES E PARTE TÉCNICA COM FICHA DE ANAMNESE E FORMULARIO DE PERGUNTAS SIMPLES -->
+<section id="clientes" class="aba">
+            <h5>👤 Cadastro e Anamnese</h5>
+            <div class="card">
+                <div class="card-content">
+                    <input type="text" id="cli_nome" placeholder="Nome Completo">
+                    <input type="tel" id="cli_tel" placeholder="WhatsApp (DDD)">
+                    
+                    <h6>Ficha Capilar</h6>
+                    <textarea id="cli_historico" class="materialize-textarea" placeholder="Histórico Químico (EX.:Henê, Progressiva...)"></textarea>
+                    
+                    <p>
+                        <label>
+                            <input type="checkbox" id="cli_alergia" />
+                            <span>Possui Alergias?</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input type="checkbox" id="cli_mecha" />
+                            <span>Teste de Mecha Aprovado?</span>
+                        </label>
+                    </p>
+
+                    <button class="btn green darken-2" onclick="salvarCliente()" style="width:100%">Salvar Cliente</button>
+                </div>
+            </div>
+        </section>
+
+<!-- CONTROLE DE ESTOQUE SIMPLES -->
+<section id="estoque" class="aba">
+            <h5>📦 Controle de Produtos</h5>
+            <div class="card">
+                <div class="card-content">
+                    <input type="text" id="prod_nome" placeholder="Nome do Produto">
+                    <input type="number" id="prod_qtd" placeholder="Quantidade em Estoque">
+                    <button class="btn orange darken-4" onclick="salvarEstoque()" style="width:100%">Adicionar Produto</button>
+                </div>
+            </div>
+            <table class="striped">
+                <thead><tr><th>Produto</th><th>Qtd</th></tr></thead>
+                <tbody id="tabelaEstoque"></tbody>
+            </table>
+        </section>
+
+<!-- MOTOR JAVASCRIPT LÓGICA E CHAVES DO FIREBASE -->
+</div> <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+
+<!-- CONFIGURAÇÃO DO SEU FIREBASE (COPIE DO SEU CONSOLE) -->
+	const firebaseConfig = {
+   	  apiKey: "AIzaSyBngUoQCVm0aI9hdPHipFXdlSAZy6cQWXg",
+	  authDomain: "chicco-eddy-gestao.firebaseapp.com",
+	  projectId: "chicco-eddy-gestao",
+	  storageBucket: "chicco-eddy-gestao.firebasestorage.app",
+	  messagingSenderId: "544687351490",
+	  appId: "1:544687351490:web:3a95cb6c17feea1015bd5b",
+	  measurementId: "G-3PLXGQ53ZZ"
+	};
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+<!-- FUNÇÃO PARA TROCAR DE ABA -->
+        window.abrirAba = function(idAba) {
+            document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+            document.getElementById(idAba).classList.add('ativa');
+            var instance = M.Sidenav.getInstance(document.getElementById('mobile-demo'));
+            if(instance) instance.close();
+        }
+
+<!-- SALVAR CLIENTE E ANAMNESE -->
+        window.salvarCliente = async function() {
+            const nome = document.getElementById('cli_nome').value;
+            if(!nome) return alert("Digite o nome!");
+
+            await addDoc(collection(db, "clientes"), {
+                nome: nome,
+                tel: document.getElementById('cli_tel').value,
+                historico: document.getElementById('cli_historico').value,
+                alergia: document.getElementById('cli_alergia').checked,
+                mecha: document.getElementById('cli_mecha').checked,
+                dataCadastro: new Date()
+            });
+            alert("Cliente e Ficha salvos!");
+            abrirAba('home');
+        }
+
+<!-- Inicializar Menu Mobile -->
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.sidenav');
+            M.Sidenav.init(elems);
+        });
+    </script>
+</body>
+</html>
