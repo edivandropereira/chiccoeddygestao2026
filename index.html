@@ -4,26 +4,65 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="icon" href="Logo_2026.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Integrado Chicco e Eddy Gestão de Beleza 2026.0</title>
+    <title>Sitema Integrado Salão de Beleza PWA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        body { background-color: #f5f5f5; }
-        .aba { display: none; padding: 20px; }
-        .aba.ativa { display: block; }
-        .card-meta { background: linear-gradient(45deg, #1a237e, #3949ab); color: white; }
+	.nav-wrapper .brand-logo img {
+	    padding: 5px 0; /* Dá um respiro para a logo não tocar no topo/fundo da barra */
+	}
+
+	/* Ajuste para o nome do salão não sumir totalmente no celular, se for pequeno */
+	@media only screen and (max-width: 600px) {
+	    .brand-logo {
+	        font-size: 1rem !important;
+	    }
+	}
+	body {
+	    background-color: #f0f2f5; 
+	    /* Caminho para sua imagem (pode ser um link da internet ou o nome do arquivo) */
+	    background-image: url('Logo_2026.png'); 
+	    background-repeat: no-repeat;
+	    background-position: center;
+	    background-attachment: fixed;
+	    background-size: 600px; /* Ajuste o tamanho da logo aqui */
+	    position: relative;
+	}
+
+	/* Criando o efeito de transparência (Marca d'água) */
+	body::before {
+	    content: "";
+	    position: fixed;
+	    top: 0; left: 0; right: 0; bottom: 0;
+	    background-color: rgba(240, 242, 245, 0.9); /* Cor do fundo com transparência */
+	    z-index: -1; /* Joga a cor por cima da logo, mas atrás dos botões */
+	}
+
+/*        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+/*        .aba { display: none; padding-top: 20px; animation: fadeIn 0.3s; }
+/*        .aba.ativa { display: block; }
+/*        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+/*        .card-meta { background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%); color: white; border-radius: 15px; }
+/*        .btn-full { width: 100%; margin-top: 15px; border-radius: 8px; }
+/*        nav { border-bottom: 1px solid #ddd; }
+/*        .card { border-radius: 12px; }
     </style>
 </head>
 <body>
-
     <nav class="indigo darken-4">
         <div class="nav-wrapper container">
-            <a href="#" class="brand-logo">Chicco & Eddy Estúdio de Beleza STI</a>
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <a href="#" class="brand-logo left" style="display: flex; align-items: center;">
+                <img src="Logo_2026.png" alt="Logo" style="height: 40px; margin-right: 10px; vertical-align: middle;">
+                <span class="hide-on-small-only">Chicco & Eddy Estúdio de Beleza STI</span>
+            </a>
+            
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+        
             <ul class="right hide-on-med-and-down">
-                <li><a onclick="abrirAba('home')">Home</a></li>
+                <li><a onclick="abrirAba('home')">Início</a></li>
                 <li><a onclick="abrirAba('agenda')">Agenda</a></li>
                 <li><a onclick="abrirAba('clientes')">Clientes</a></li>
                 <li><a onclick="abrirAba('estoque')">Estoque</a></li>
@@ -32,159 +71,171 @@
     </nav>
 
     <ul class="sidenav" id="mobile-demo">
-        <li><a onclick="abrirAba('home')"><i class="material-icons">home</i>Home</a></li>
+        <li class="indigo darken-4 center-align" style="padding: 20px 0;">
+            <i class="material-icons white-text large">brush</i>
+        </li>
+        <li><a onclick="abrirAba('home')"><i class="material-icons">home</i>Início</a></li>
         <li><a onclick="abrirAba('agenda')"><i class="material-icons">event</i>Agenda</a></li>
         <li><a onclick="abrirAba('clientes')"><i class="material-icons">people</i>Clientes</a></li>
         <li><a onclick="abrirAba('estoque')"><i class="material-icons">inventory</i>Estoque</a></li>
     </ul>
 
-    <div id="conteudo" class="container">
+    <div class="container">
 
-<!-- HOME E PAINEL DE METAS, MOSTRA O FATURAMENTO E BOTÕES RÁPIDOS -->
-<section id="home" class="aba ativa">
-            <div class="card card-meta">
+        <section id="home" class="aba ativa">
+            <div class="card card-meta z-depth-2">
                 <div class="card-content">
-                    <span class="card-title">Meta Mensal</span>
-                    <h4 id="valorFaturado">R$ 0,00</h4>
-                    <div class="progress grey lighten-1">
-                        <div id="barraMeta" class="determinate white" style="width: 0%"></div>
+                    <span class="card-title">Faturamento do Mês</span>
+                    <h4 id="valorHome">R$ 0,00</h4>
+                    <div class="progress grey darken-2">
+                        <div id="barraProgresso" class="determinate white" style="width: 0%"></div>
                     </div>
-                    <p id="textoMeta">0% da meta alcançada</p>
+                    <p id="labelProgresso">Carregando meta...</p>
                 </div>
             </div>
-
+            
             <div class="row">
-                <div class="col s6">
-                    <div class="card center-align" onclick="abrirAba('agenda')">
+                <div class="col s6 m3">
+                    <div class="card center-align hoverable" onclick="abrirAba('agenda')">
                         <div class="card-content">
-                            <i class="material-icons medium blue-text">event</i>
+                            <i class="material-icons medium blue-text">add_circle</i>
                             <p>Agenda</p>
                         </div>
                     </div>
                 </div>
-                <div class="col s6">
-                    <div class="card center-align" onclick="abrirAba('clientes')">
+                <div class="col s6 m3">
+                    <div class="card center-align hoverable" onclick="abrirAba('clientes')">
                         <div class="card-content">
                             <i class="material-icons medium green-text">person_add</i>
-                            <p>Clientes</p>
+                            <p>Cliente</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-<!-- AGENDA DE HORÁRIOS, FORMULÁRIO SIMPLES PARA AGENDAMENTOS -->
-<section id="agenda" class="aba">
+        <section id="agenda" class="aba">
             <h5>📅 Novo Agendamento</h5>
             <div class="card">
                 <div class="card-content">
                     <input type="text" id="ag_cliente" placeholder="Nome da Cliente">
-                    <input type="text" id="ag_servico" placeholder="Serviço (Ex: Mechas)">
+                    <input type="text" id="ag_servico" placeholder="Serviço (ex: Luzes)">
                     <input type="datetime-local" id="ag_data">
-                    <button class="btn blue darken-4" onclick="salvarAgenda()" style="width:100%">Reservar Horário</button>
+                    <button class="btn blue darken-4 btn-full" onclick="salvarAgenda()">Confirmar Horário</button>
                 </div>
             </div>
-            <ul class="collection with-header" id="listaAgenda">
-                <li class="collection-header"><h6>Próximos Clientes</h6></li>
-            </ul>
         </section>
 
-<!-- CADASTRO DE CLIENTES E PARTE TÉCNICA COM FICHA DE ANAMNESE E FORMULARIO DE PERGUNTAS SIMPLES -->
-<section id="clientes" class="aba">
-            <h5>👤 Cadastro e Anamnese</h5>
+        <section id="clientes" class="aba">
+            <h5>👤 Ficha de Anamnese</h5>
             <div class="card">
                 <div class="card-content">
                     <input type="text" id="cli_nome" placeholder="Nome Completo">
-                    <input type="tel" id="cli_tel" placeholder="WhatsApp (DDD)">
-                    
-                    <h6>Ficha Capilar</h6>
-                    <textarea id="cli_historico" class="materialize-textarea" placeholder="Histórico Químico (EX.:Henê, Progressiva...)"></textarea>
-                    
+                    <input type="tel" id="cli_tel" placeholder="WhatsApp (DDD + Número)">
+                    <textarea id="cli_quimica" class="materialize-textarea" placeholder="Histórico Químico (ex: Henê, Progressiva)"></textarea>
                     <p>
-                        <label>
-                            <input type="checkbox" id="cli_alergia" />
-                            <span>Possui Alergias?</span>
-                        </label>
+                        <label><input type="checkbox" id="cli_alergia" /><span>Alergias?</span></label>
                     </p>
                     <p>
-                        <label>
-                            <input type="checkbox" id="cli_mecha" />
-                            <span>Teste de Mecha Aprovado?</span>
-                        </label>
+                        <label><input type="checkbox" id="cli_mecha" /><span>Teste de Mecha Aprovado?</span></label>
                     </p>
-
-                    <button class="btn green darken-2" onclick="salvarCliente()" style="width:100%">Salvar Cliente</button>
+                    <button class="btn green darken-2 btn-full" onclick="salvarCliente()">Salvar Ficha Técnica</button>
                 </div>
             </div>
         </section>
 
-<!-- CONTROLE DE ESTOQUE SIMPLES -->
-<section id="estoque" class="aba">
-            <h5>📦 Controle de Produtos</h5>
+        <section id="estoque" class="aba">
+            <h5>📦 Estoque</h5>
             <div class="card">
                 <div class="card-content">
                     <input type="text" id="prod_nome" placeholder="Nome do Produto">
-                    <input type="number" id="prod_qtd" placeholder="Quantidade em Estoque">
-                    <button class="btn orange darken-4" onclick="salvarEstoque()" style="width:100%">Adicionar Produto</button>
+                    <input type="number" id="prod_qtd" placeholder="Quantidade">
+                    <button class="btn orange darken-4 btn-full" onclick="salvarEstoque()">Adicionar Item</button>
                 </div>
             </div>
-            <table class="striped">
-                <thead><tr><th>Produto</th><th>Qtd</th></tr></thead>
-                <tbody id="tabelaEstoque"></tbody>
-            </table>
         </section>
 
-<!-- MOTOR JAVASCRIPT LÓGICA E CHAVES DO FIREBASE -->
-</div> <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+    </div>
 
-<!-- CONFIGURAÇÃO DO SEU FIREBASE (COPIE DO SEU CONSOLE) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
 	const firebaseConfig = {
-   	  apiKey: "AIzaSyBngUoQCVm0aI9hdPHipFXdlSAZy6cQWXg",
-	  authDomain: "chicco-eddy-gestao.firebaseapp.com",
-	  projectId: "chicco-eddy-gestao",
-	  storageBucket: "chicco-eddy-gestao.firebasestorage.app",
-	  messagingSenderId: "544687351490",
-	  appId: "1:544687351490:web:3a95cb6c17feea1015bd5b",
-	  measurementId: "G-3PLXGQ53ZZ"
-	};
-        
+  	    apiKey: "AIzaSyBngUoQCVm0aI9hdPHipFXdlSAZy6cQWXg",
+	    authDomain: "chicco-eddy-gestao.firebaseapp.com",
+	    projectId: "chicco-eddy-gestao",
+	    storageBucket: "chicco-eddy-gestao.firebasestorage.app",
+	    messagingSenderId: "544687351490",
+	    appId: "1:544687351490:web:3a95cb6c17feea1015bd5b",
+	    measurementId: "G-3PLXGQ53ZZ"
+
+        };
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-<!-- FUNÇÃO PARA TROCAR DE ABA -->
+        // --- NAVEGAÇÃO ---
         window.abrirAba = function(idAba) {
-            document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
-            document.getElementById(idAba).classList.add('ativa');
-            var instance = M.Sidenav.getInstance(document.getElementById('mobile-demo'));
-            if(instance) instance.close();
-        }
+            $('.aba').removeClass('ativa');
+            $('#' + idAba).addClass('ativa');
+            const inst = M.Sidenav.getInstance($('.sidenav'));
+            if(inst) inst.close();
+        };
 
-<!-- SALVAR CLIENTE E ANAMNESE -->
+        // --- SALVAR CLIENTE ---
         window.salvarCliente = async function() {
-            const nome = document.getElementById('cli_nome').value;
-            if(!nome) return alert("Digite o nome!");
+            try {
+                const nome = $('#cli_nome').val();
+                if(!nome) return M.toast({html: 'Preencha o nome!'});
 
-            await addDoc(collection(db, "clientes"), {
-                nome: nome,
-                tel: document.getElementById('cli_tel').value,
-                historico: document.getElementById('cli_historico').value,
-                alergia: document.getElementById('cli_alergia').checked,
-                mecha: document.getElementById('cli_mecha').checked,
-                dataCadastro: new Date()
-            });
-            alert("Cliente e Ficha salvos!");
-            abrirAba('home');
-        }
+                await addDoc(collection(db, "clientes"), {
+                    nome: nome,
+                    tel: $('#cli_tel').val(),
+                    quimica: $('#cli_quimica').val(),
+                    alergia: $('#cli_alergia').is(':checked'),
+                    mecha: $('#cli_mecha').is(':checked'),
+                    data: new Date()
+                });
+                M.toast({html: '✅ Ficha salva!'});
+                window.abrirAba('home');
+            } catch (e) { alert(e.message); }
+        };
 
-<!-- Inicializar Menu Mobile -->
-        document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('.sidenav');
-            M.Sidenav.init(elems);
+        // --- SALVAR AGENDA ---
+        window.salvarAgenda = async function() {
+            try {
+                await addDoc(collection(db, "agenda"), {
+                    cliente: $('#ag_cliente').val(),
+                    servico: $('#ag_servico').val(),
+                    data: $('#ag_data').val(),
+                    status: 'pendente'
+                });
+                M.toast({html: '📅 Horário agendado!'});
+                window.abrirAba('home');
+            } catch (e) { alert(e.message); }
+        };
+
+        // --- SALVAR ESTOQUE ---
+        window.salvarEstoque = async function() {
+            try {
+                await addDoc(collection(db, "estoque"), {
+                    produto: $('#prod_nome').val(),
+                    quantidade: $('#prod_qtd').val()
+                });
+                M.toast({html: '📦 Estoque atualizado!'});
+            } catch (e) { alert(e.message); }
+        };
+
+        $(document).ready(function(){
+            $('.sidenav').sidenav();
+            M.AutoInit();
         });
     </script>
 </body>
 </html>
+
+
